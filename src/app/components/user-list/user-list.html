@@ -1,0 +1,15 @@
+<div class="container mx-auto p-6 max-w-4xl">
+  <h1 class="text-3xl font-bold text-indigo-700 mb-6">GitHub Users</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    @for (user of users(); track user.id) {
+      <app-user-card [user]="user" />
+    }
+  </div>
+
+  <div #sentinel class="h-20 flex justify-center items-center mt-4">
+    @if (isLoading()) {
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+    }
+  </div>
+</div>

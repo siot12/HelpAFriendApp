@@ -1,0 +1,85 @@
+<div class="container mx-auto p-4 max-w-4xl pt-8 pb-20">
+  <button (click)="goBack()"
+          class="group mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors">
+      <span class="p-1 rounded-full bg-slate-100 group-hover:bg-indigo-100 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </span>
+    Back to users
+  </button>
+
+  @if (userInfo(); as user) {
+    <div class="relative bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden mb-10">
+      <div class="h-32 bg-gradient-to-r from-indigo-600 to-violet-500"></div>
+
+      <div class="px-8 pb-8 flex flex-col sm:flex-row items-center sm:items-end -mt-12 gap-6">
+        <img [src]="user.avatar_url"
+             class="w-32 h-32 rounded-3xl border-4 border-white shadow-xl bg-white z-10">
+
+        <div class="flex-1 text-center sm:text-left mb-2">
+          <h1 class="text-3xl font-bold text-slate-900">{{ user.login }}</h1>
+          <div class="flex items-center justify-center sm:justify-start gap-3 mt-2 text-slate-600">
+              <span class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-indigo-100">
+                {{ user.type }}
+              </span>
+            <a [href]="user.html_url" target="_blank" class="text-sm font-medium hover:text-indigo-600 hover:underline flex items-center gap-1">
+              github.com/{{user.login}}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between mb-6 px-2">
+      <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+        <svg class="text-indigo-500" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Repositories
+        <span class="bg-slate-100 text-slate-600 text-xs py-0.5 px-2 rounded-full ml-1">{{ repos().length }}</span>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      @for (repo of repos(); track repo.id) {
+        <a [href]="repo.html_url" target="_blank"
+           class="group block bg-white p-5 rounded-xl border border-slate-200 hover:border-indigo-300 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 h-full flex flex-col">
+
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="font-semibold text-indigo-600 text-lg group-hover:underline decoration-2 underline-offset-2">
+              {{ repo.name }}
+            </h3>
+            <div class="flex items-center gap-1 text-xs font-medium text-slate-500 bg-slate-50 px-2 py-1 rounded-md border border-slate-100">
+              <span class="text-amber-400">★</span> {{ repo.stargazers_count }}
+            </div>
+          </div>
+
+          <p class="text-slate-600 text-sm mb-4 line-clamp-2 flex-1">
+            {{ repo.description || 'No description provided.' }}
+          </p>
+
+          <div class="flex items-center gap-3 pt-4 border-t border-slate-50 mt-auto">
+            @if(repo.language) {
+              <div class="flex items-center gap-1.5 text-xs text-slate-500">
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                {{ repo.language }}
+              </div>
+            }
+            <span class="text-xs text-slate-400 ml-auto">Public</span>
+          </div>
+        </a>
+      } @empty {
+        <div class="col-span-full py-12 text-center text-slate-400 bg-white rounded-xl border border-dashed border-slate-300">
+          No public repositories found for this user.
+        </div>
+      }
+    </div>
+
+  } @else {
+    <div class="animate-pulse">
+      <div class="h-48 bg-slate-200 rounded-3xl mb-8"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="h-32 bg-slate-200 rounded-xl"></div>
+        <div class="h-32 bg-slate-200 rounded-xl"></div>
+      </div>
+    </div>
+  }
+</div>
